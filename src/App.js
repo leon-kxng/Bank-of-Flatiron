@@ -1,4 +1,4 @@
-import './index.css';
+import './App.css';
 import Table from './components/Table';
 import Form from './components/form';
 import Searchbar from './components/searchBar';
