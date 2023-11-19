@@ -85,25 +85,32 @@
       "amount": -975
     },
     {
-      "date": "2022-09-25",
-      "description": "description",
-      "category": "food",
-      "amount": "-0.01",
+      "date": "2020-10-03",
+      "description": "chuck and cheese",
+      "category": "Food",
+      "amount": "353423",
       "id": 13
     },
     {
-      "date": "",
-      "description": "lunch",
-      "category": "food",
-      "amount": "-0.01",
+      "date": "2022-06-27",
+      "description": "Amazon Kindle Paperwhite",
+      "category": "Books",
+      "amount": "3",
       "id": 14
     },
     {
-      "date": "",
-      "description": "",
-      "category": "",
-      "amount": "",
+      "date": "2022-07-04",
+      "description": "Tennis Racquet",
+      "category": "Sports",
+      "amount": "1",
       "id": 15
+    },
+    {
+      "date": "2022-07-14",
+      "description": "Amazon Kindle Paperwhite",
+      "category": "Books",
+      "amount": "2",
+      "id": 16
     }
   ]
 }
