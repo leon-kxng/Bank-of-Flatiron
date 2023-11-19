@@ -1,52 +1,89 @@
-import logo from './logo.svg';
-import './App.css';
-import {useState, useEffect} from 'react';
-import FormTransaction from './components/FormTransaction';
-import Header from './components/Header';
-import SearchBar from './components/SearchBar';
-import TableTransaction from './components/TableTransaction';
+import './index.css';
+import Table from './components/Table';
+import Form from './components/form';
+import Searchbar from './components/searchBar';
+import { useEffect,useState } from "react";
 
-//main function
 function App() {
+  const [transactions,setTransactions] = useState(null)
+  const [initialState,setInitialState] = useState(null)
+  const [isLoading,setIsLoading] = useState(true)
+ 
+  
+  useEffect(() =>{
+  fetch("https://my-json-server.typicode.com/leon-kxng/Bank-of-Flatiron/transactions")
+  .then((response)=> response.json())
+  .then((res)=>{ 
+    console.log(res)
+    sortByCategory(res)
+    setInitialState(res)
+    setIsLoading(false)
+  })
+  },[])
 
-  const [transactions, setTransactions] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  
+let sortByCategory = (data) => {
+data.sort((a,b)=>{
+  let categoryA = a.category.toLowerCase()
+  let categoryB = b.category.toLowerCase()
+  
+  if(categoryA < categoryB ) {
+    return -1;
+}
+if (categoryA > categoryB ) {
+    return 1;
+}
+return 0;
+})
+  setTransactions(data)
+}
 
-//retriving data from the db
-  useEffect(() => {
-    fetch('https://my-json-server.typicode.com/leon-kxng/Bank-of-Flatiron/transactions')
-      .then((response) => response.json())
-      .then((data) => {
-        setTransactions(data);
-      });
-  }, []);
 
-//function to add a new transaction from a form input
-  function addTransaction(newTransaction) {
-    setTransactions([...transactions, newTransaction]);
+  let handleSearch = (value) => {
+    
+    let income = transactions.filter((transaction )=> {return transaction.description.toLowerCase().includes(value.toLowerCase())})
+    if(income.length > 0){
+    console.log(income)
+    setTransactions(income)}
+    else{console.log("No transactions")}
   }
-//function to filter the transactions by the description
-  const filteredTransactions = transactions
-    ? transactions.filter((transaction) =>
-        transaction.description.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : [];
+  
 
-//function to delete the transaction by it's id
-  function deleteTransaction(id) {
-    const updatedTransactions = transactions.filter((transaction) => transaction.id !== id);
-    setTransactions(updatedTransactions);
+  let [name, setName] = useState(false)
+  let [newName, setNewName] = useState(true)
+  let appendTransaction = ()=>{
+    setName(true)
+    setNewName(false)
+    console.log('true')
   }
+  let removeTransaction = ()=>{
+    setNewName(true)
+    setName(false)
+    console.log('true')
+  }
+  let handleBack = () =>{
+    setTransactions(initialState)
+    setName(false)
+    setNewName(true)
+  }
+ 
+  let newClassName = newName ? "formVisibible" : "formHidden"
+  let className = name ? "formVisible" : "formHidden"
 
-//rendering some key components
+
   return (
     <div className="App">
-      <Header />
-      <FormTransaction  onSubmit={addTransaction} />
-      <SearchBar onSearch={setSearchTerm} />
-      <TableTransaction transactions={filteredTransactions} onDelete={deleteTransaction} />
-      
-      
+      <div className = {newClassName} id='mainContent'>
+      {transactions && <Searchbar appendTransaction = {appendTransaction} handleBack = {handleBack} handleSearch = {handleSearch}/>}
+      {isLoading &&   <div id="loader4">
+        <div id="loadline">
+        </div>
+        <div id="loadline2">
+        </div>
+    </div>}
+      {transactions && <Table data = {transactions}/>}
+      </div>
+      <Form removeTransaction = {removeTransaction} className = {className} />
     </div>
   );
 }
